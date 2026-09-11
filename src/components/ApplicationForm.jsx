@@ -151,18 +151,30 @@ export default function ApplicationForm({
 
             </label>
 
-            <label>
-              Job Type
-
+           <label>
+            Job Type
+            <select
+              value={['Full-time','Part-time','Contract','Temporary','Internship','Freelance'].includes(form.jobType) ? form.jobType : (form.jobType ? 'Other' : '')}
+              onChange={(e) => set('jobType', e.target.value === 'Other' ? '' : e.target.value)}
+            >
+              <option value="">Select job type</option>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Contract">Contract</option>
+              <option value="Temporary">Temporary</option>
+              <option value="Internship">Internship</option>
+              <option value="Freelance">Freelance</option>
+              <option value="Other">Other</option>
+            </select>
+            {!['Full-time','Part-time','Contract','Temporary','Internship','Freelance',''].includes(form.jobType) && (
               <input
                 value={form.jobType}
-                onChange={(e) =>
-                  set('jobType', e.target.value)
-                }
-                placeholder="Full-time"
+                onChange={(e) => set('jobType', e.target.value)}
+                placeholder="Enter job type"
+                autoFocus
               />
-
-            </label>
+            )}
+          </label>
 
             <label>
               Salary Range
