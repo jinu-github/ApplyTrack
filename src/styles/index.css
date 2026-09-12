@@ -3746,9 +3746,17 @@ nav {
 ================================ */
 
 .gmail-email-modal {
-  width: min(560px, 100%);
+  width: min(720px, 92vw);
+  max-width: 720px;
+  max-height: 88vh;
+  overflow: hidden;                            
+  display: flex;
+  flex-direction: column;
 }
-
+.gmail-email-modal .modal-actions {
+  flex-shrink: 0;
+  margin-top: 16px;
+}
 .gmail-modal-badges {
   display: flex;
   align-items: center;
@@ -3765,8 +3773,19 @@ nav {
   margin-top: 18px;
   padding-top: 16px;
   border-top: 1px solid #202d40;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
-
+.gmail-modal-iframe {
+  flex: 1;
+  width: 100%;
+  min-height: 500px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+}
 .gmail-modal-body p:not(.eyebrow) {
   margin: 6px 0 0;
   color: #cbd7e7;

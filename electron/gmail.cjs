@@ -3,6 +3,8 @@ const http = require('http')
 const { shell, app, safeStorage } = require('electron')
 const fs = require('fs')
 const path = require('path')
+const { htmlToText } = require('html-to-text')
+const sanitizeHtml = require('sanitize-html')
 
 const PORT = 3000
 
@@ -604,6 +606,132 @@ function classifyJobEmail(email) {
   }
 }
 
+// ---------- Body extraction ----------
+//
+// gmail.users.messages.get with format: 'full' returns the message
+// as a tree of MIME parts. We walk that tree (recursing into any
+// nested multipart sections) collecting the text/html and
+// text/plain bodies, then prefer text/html — converted to readable
+// plain text — since that's usually where the real, structured
+// content lives (text/plain is often a bare-bones or even empty
+// fallback for marketing-style emails like Indeed's).
+
+function decodeBase64Url(data) {
+  if (!data) return ''
+  return Buffer.from(data, 'base64url').toString('utf-8')
+}
+
+function findBodyParts(payload, collected = { html: '', plain: '' }) {
+  if (!payload) return collected
+
+  if (payload.mimeType === 'text/html' && payload.body?.data) {
+    collected.html += decodeBase64Url(payload.body.data)
+  }
+
+  if (payload.mimeType === 'text/plain' && payload.body?.data) {
+    collected.plain += decodeBase64Url(payload.body.data)
+  }
+
+  if (payload.parts) {
+    for (const part of payload.parts) {
+      findBodyParts(part, collected)
+    }
+  }
+
+  return collected
+}
+
+function sanitizeEmailHtml(html) {
+  const cleaned = sanitizeHtml(html, {
+    allowedTags: [
+      'p', 'div', 'span', 'br', 'hr',
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'ul', 'ol', 'li',
+      'strong', 'b', 'em', 'i', 'u', 'small',
+      'a', 'img',
+      'table', 'thead', 'tbody', 'tr', 'td', 'th'
+    ],
+    allowedAttributes: {
+      a: ['href', 'target', 'rel'],
+      img: ['src', 'alt', 'width', 'height'],
+      td: ['colspan', 'rowspan'],
+      th: ['colspan', 'rowspan'],
+      '*': ['style', 'align']
+    },
+    allowedSchemes: ['http', 'https', 'mailto'],
+    exclusiveFilter: (frame) =>
+      frame.tag === 'img' &&
+      (frame.attribs.width === '1' || frame.attribs.height === '1'),
+    transformTags: {
+      a: sanitizeHtml.simpleTransform('a', {
+        target: '_blank',
+        rel: 'noopener noreferrer'
+      })
+    }
+  })
+
+  // Most marketing emails (Indeed included) are built as fixed-width
+  // (~600px) table layouts. Force everything to scale down to the
+  // iframe's actual width instead of overflowing it.
+  return `
+    <html>
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+          html, body {
+            margin: 0;
+            padding: 12px;
+            width: auto !important;
+            max-width: 100% !important;
+            overflow-x: hidden !important;
+            font-family: Arial, Helvetica, sans-serif;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+          }
+          table {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+          td, th {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+          }
+          img {
+            max-width: 100% !important;
+            height: auto !important;
+          }
+          * {
+            box-sizing: border-box;
+          }
+        </style>
+      </head>
+      <body>${cleaned}</body>
+    </html>
+  `
+}
+
+function extractBody(payload) {
+  const { html, plain } = findBodyParts(payload)
+
+  if (html) {
+    const bodyText = htmlToText(html, {
+      wordwrap: false,
+      selectors: [
+        { selector: 'a', options: { ignoreHref: true } },
+        { selector: 'img', format: 'skip' }
+      ]
+    }).trim()
+
+    return { text: bodyText, html: sanitizeEmailHtml(html) }
+  }
+
+  if (plain) {
+    return { text: plain.trim(), html: '' }
+  }
+
+  return { text: '', html: '' }
+}
+
 async function getRecentEmails() {
   const oauthConfig = getOAuthConfig()
 
@@ -647,12 +775,7 @@ async function getRecentEmails() {
     const email = await gmail.users.messages.get({
       userId: 'me',
       id: message.id,
-      format: 'metadata',
-      metadataHeaders: [
-        'From',
-        'Subject',
-        'Date'
-      ]
+      format: 'full'
     })
 
     const headers = email.data.payload.headers || []
@@ -667,12 +790,16 @@ async function getRecentEmails() {
       return header?.value || ''
     }
 
+    const extracted = extractBody(email.data.payload)
+
     const emailData = {
       id: message.id,
       from: getHeader('From'),
       subject: getHeader('Subject'),
       date: getHeader('Date'),
-      snippet: email.data.snippet || ''
+      snippet: email.data.snippet || '',
+      body: extracted.text,
+      bodyHtml: extracted.html
     }
 
     const classification =

@@ -467,11 +467,21 @@ export default function JobEmails() {
 
             <div className="gmail-modal-body">
               <p className="eyebrow">MESSAGE</p>
-              <p>
-                {selectedEmail.body ||
-                  selectedEmail.snippet ||
-                  'No preview available for this email.'}
-              </p>
+
+              {selectedEmail.bodyHtml ? (
+                <iframe
+                  className="gmail-modal-iframe"
+                  sandbox="allow-same-origin allow-popups"
+                  srcDoc={selectedEmail.bodyHtml}
+                  title="Email content"
+                />
+              ) : (
+                <p>
+                  {selectedEmail.body ||
+                    selectedEmail.snippet ||
+                    'No preview available for this email.'}
+                </p>
+              )}
             </div>
 
             <div className="modal-actions">
