@@ -50,7 +50,12 @@ export default function App() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(applications))
   }, [applications])
 
-  const addApplication = (data) => {
+  // `options.navigateToDetails` defaults to true for the normal "Add
+  // Application" form flow. The Email Updates feature in JobEmails
+  // passes false so confirming a suggestion doesn't yank the user
+  // away from the page they're reviewing suggestions on.
+  const addApplication = (data, options = {}) => {
+    const { navigateToDetails = true } = options
     const now = new Date().toISOString().slice(0, 10)
 
     const application = {
@@ -70,7 +75,11 @@ export default function App() {
 
     setFormOpen(false)
 
-    navigate(`/applications/${application.id}`)
+    if (navigateToDetails) {
+      navigate(`/applications/${application.id}`)
+    }
+
+    return application
   }
 
   const editApplication = (application) => {
@@ -367,7 +376,13 @@ export default function App() {
                  
                 <Route
                   path="/emails"
-                  element={<JobEmails />}
+                  element={
+                    <JobEmails
+                      applications={applications}
+                      onAddApplication={addApplication}
+                      onUpdateApplication={updateApplication}
+                    />
+                  }
                 />
 
                 <Route

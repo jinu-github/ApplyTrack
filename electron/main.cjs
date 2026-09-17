@@ -15,9 +15,31 @@ const {
   hasOAuthCredentials,
   clearOAuthCredentials
 } = require('./gmail.cjs')
+const {
+  saveApiKey: saveAiApiKey,
+  clearApiKey: clearAiApiKey,
+  getAiStatus,
+  extractEmailFields
+} = require('./geminiExtraction.cjs')
 
 ipcMain.handle('gmail:saveCredentials', (event, creds) => saveOAuthCredentials(creds))
 ipcMain.handle('gmail:clearCredentials', () => clearOAuthCredentials())
+
+ipcMain.handle('ai:saveApiKey', (event, apiKey) => saveAiApiKey(apiKey))
+ipcMain.handle('ai:clearApiKey', () => clearAiApiKey())
+ipcMain.handle('ai:status', () => getAiStatus())
+ipcMain.handle('ai:extractEmails', async (event, emails) => {
+  try {
+    return await extractEmailFields(emails)
+  } catch (error) {
+    console.error('AI extraction error:', error)
+
+    return {
+      success: false,
+      error: error.message
+    }
+  }
+})
 
 const isDev = !app.isPackaged
 

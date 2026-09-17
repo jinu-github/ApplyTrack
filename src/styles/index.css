@@ -3930,3 +3930,476 @@ nav {
     align-items: stretch;
   }
 }
+
+/* ================================
+   EMAIL UPDATES (Smart Email
+   Application Tracking suggestions)
+================================ */
+
+.gmail-suggestions-section {
+  margin-bottom: 26px;
+}
+
+.gmail-suggestions-subtitle {
+  margin: 0;
+  color: #8492a7;
+  font-size: 13px;
+}
+
+.gmail-suggestions-list {
+  display: grid;
+  gap: 12px;
+}
+
+.email-suggestion-card {
+  border-radius: 14px;
+  padding: 18px 20px;
+  border-left: 3px solid #4b8dff;
+}
+
+.email-suggestion-card.confidence-high {
+  border-left-color: #22c55e;
+}
+
+.email-suggestion-card.confidence-medium {
+  border-left-color: #4b8dff;
+}
+
+.email-suggestion-card.confidence-low {
+  border-left-color: #eab308;
+}
+
+.email-suggestion-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.email-suggestion-type {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  background: rgba(75, 141, 255, 0.14);
+  color: #72a7ff;
+}
+
+.email-suggestion-type.status_update {
+  background: rgba(168, 85, 247, 0.14);
+  color: #c084fc;
+}
+
+.confidence-pill {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: capitalize;
+  flex-shrink: 0;
+}
+
+.confidence-pill.confidence-high {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+}
+
+.confidence-pill.confidence-medium {
+  background: rgba(75, 141, 255, 0.14);
+  color: #72a7ff;
+}
+
+.confidence-pill.confidence-low {
+  background: rgba(234, 179, 8, 0.14);
+  color: #eab308;
+}
+
+.email-suggestion-card h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+  color: #edf3ff;
+}
+
+.status-change-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: #182337;
+  color: #9ba9bc;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status-change-preview svg {
+  color: #63718a;
+  flex-shrink: 0;
+}
+
+.status-change-target {
+  color: #72a7ff;
+}
+
+.email-suggestion-reason {
+  margin: 0 0 6px;
+  color: #b7c3d4;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.email-suggestion-source {
+  margin: 0 0 16px;
+  color: #63718a;
+  font-size: 12px;
+}
+
+.email-suggestion-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.suggestion-source-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(192, 132, 252, 0.14);
+  color: #c084fc;
+  flex-shrink: 0;
+}
+
+/* ================================
+   AI EXTRACTION STATUS BAR
+================================ */
+
+.ai-status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 16px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  background: #111b2b;
+  border: 1px solid #243247;
+}
+
+.ai-status-bar-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #9ba9bc;
+  font-size: 13px;
+  min-width: 0;
+}
+
+.ai-status-bar-info svg {
+  color: #c084fc;
+  flex-shrink: 0;
+}
+
+.ai-status-bar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.ai-toggle-button {
+  border: 1px solid #233047;
+  background: #182337;
+  color: #718096;
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.ai-toggle-button[aria-pressed="true"] {
+  background: rgba(192, 132, 252, 0.14);
+  border-color: rgba(192, 132, 252, 0.4);
+  color: #c084fc;
+}
+
+/* ================================
+   VIEW TOGGLE (Cards / Table)
+================================ */
+
+.view-toggle {
+  display: flex;
+  align-items: center;
+
+  height: 42px;
+  padding: 3px;
+
+  background: rgba(9, 16, 28, 0.55);
+  border: 1px solid #2c3b52;
+  border-radius: 9px;
+}
+
+.view-toggle button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  height: 100%;
+  padding: 0 12px;
+
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #718198;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.view-toggle button:hover {
+  color: #cbd7e7;
+}
+
+.view-toggle button.active {
+  background: rgba(75, 141, 255, 0.14);
+  color: #72a7ff;
+}
+
+@media (max-width: 850px) {
+  .view-toggle {
+    flex: 1;
+  }
+
+  .view-toggle button {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+/* ================================
+   APPLICATIONS TABLE (spreadsheet view)
+================================ */
+
+.applications-table-wrap {
+  background: #121c2c;
+  border: 1px solid #233047;
+  border-radius: 14px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.12);
+
+  overflow-x: auto;
+}
+
+.applications-table {
+  width: 100%;
+  min-width: 640px;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.applications-table .col-company {
+  width: 24%;
+}
+
+.applications-table .col-position {
+  width: 24%;
+}
+
+.applications-table .col-location {
+  width: 22%;
+}
+
+.applications-table .col-date {
+  width: 15%;
+}
+
+.applications-table .col-status {
+  width: 15%;
+  min-width: 118px;
+}
+
+.applications-table thead th {
+  text-align: left;
+  padding: 13px 18px;
+
+  color: #718198;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+
+  border-bottom: 1px solid #202d40;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+}
+
+.applications-table thead th span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.applications-table thead th:hover {
+  color: #cbd7e7;
+}
+
+.applications-table thead th.sorted {
+  color: #72a7ff;
+}
+
+.applications-table tbody tr {
+  border-bottom: 1px solid #1c2739;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.applications-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.applications-table tbody tr:hover {
+  background: #182337;
+}
+
+.applications-table td {
+  padding: 12px 18px;
+  vertical-align: middle;
+  color: #b7c3d4;
+}
+
+.applications-table td {
+  max-width: 0;
+}
+
+.table-company-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.table-company-cell .company-avatar {
+  width: 32px;
+  height: 32px;
+  font-size: 11px;
+  border-radius: 9px;
+  flex-shrink: 0;
+}
+
+.table-company-name {
+  display: block;
+  min-width: 0;
+
+  color: #edf3ff;
+  font-weight: 700;
+  font-size: 13px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-position-cell {
+  color: #cbd7e7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-location-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: #8290a4;
+}
+
+.table-location-cell svg {
+  flex-shrink: 0;
+  color: #63718a;
+}
+
+.table-location-cell span {
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-date-cell {
+  color: #8290a4;
+  white-space: nowrap;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+
+  padding: 5px 12px;
+
+  border-radius: 999px;
+  background: rgba(113, 128, 152, 0.12);
+  color: #9ba9bc;
+
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+.status-badge.draft {
+  background: rgba(148, 163, 184, 0.12);
+  color: #94a3b8;
+}
+
+.status-badge.applied {
+  background: rgba(245, 158, 11, 0.12);
+  color: #f59e0b;
+}
+
+.status-badge.screening {
+  background: rgba(234, 179, 8, 0.12);
+  color: #eab308;
+}
+
+.status-badge.interview {
+  background: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+}
+
+.status-badge.offer {
+  background: rgba(75, 141, 255, 0.14);
+  color: #72a7ff;
+}
+
+.status-badge.rejected {
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+}
+
+.status-badge.withdrawn {
+  background: rgba(100, 116, 139, 0.12);
+  color: #94a3b8;
+}
+
+@media (max-width: 850px) {
+  .applications-table-wrap {
+    border-radius: 12px;
+  }
+}

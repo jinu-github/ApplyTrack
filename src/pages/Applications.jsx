@@ -3,10 +3,13 @@ import {
   Plus,
   Search,
   X,
-  ArrowDownUp
+  ArrowDownUp,
+  LayoutGrid,
+  Table2
 } from 'lucide-react'
 
 import ApplicationCard from '../components/ApplicationCard'
+import ApplicationsTable from '../components/ApplicationsTable'
 import { statuses } from '../data/defaultData'
 
 export default function Applications({
@@ -18,6 +21,7 @@ export default function Applications({
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('All')
   const [sortBy, setSortBy] = useState('newest')
+  const [view, setView] = useState('table')
 
   const filteredApplications = useMemo(() => {
     let results = [...applications]
@@ -53,6 +57,12 @@ export default function Applications({
         case 'position':
           return a.position.localeCompare(b.position)
 
+        case 'location':
+          return (a.location || '').localeCompare(b.location || '')
+
+        case 'status':
+          return a.status.localeCompare(b.status)
+
         case 'newest':
         default:
           return new Date(b.appliedDate) - new Date(a.appliedDate)
@@ -71,6 +81,14 @@ export default function Applications({
     setSearch('')
     setStatusFilter('All')
     setSortBy('newest')
+  }
+
+  const handleHeaderSort = (field) => {
+    if (field === 'date') {
+      setSortBy((prev) => (prev === 'newest' ? 'oldest' : 'newest'))
+    } else {
+      setSortBy(field)
+    }
   }
 
   const hasFilters =
@@ -138,6 +156,27 @@ export default function Applications({
         </div>
 
         <div className="filter-controls">
+
+          <div className="view-toggle" role="group" aria-label="View mode">
+            <button
+              className={view === 'cards' ? 'active' : ''}
+              onClick={() => setView('cards')}
+              aria-pressed={view === 'cards'}
+              aria-label="Card view"
+            >
+              <LayoutGrid size={15} />
+              Cards
+            </button>
+            <button
+              className={view === 'table' ? 'active' : ''}
+              onClick={() => setView('table')}
+              aria-pressed={view === 'table'}
+              aria-label="Table view"
+            >
+              <Table2 size={15} />
+              Table
+            </button>
+          </div>
 
           <select
             value={statusFilter}
@@ -226,23 +265,36 @@ export default function Applications({
       {/* APPLICATION LIST */}
       {filteredApplications.length > 0 ? (
 
-        <div className="applications-list">
+        view === 'table' ? (
 
-          {filteredApplications.map(
-            (application) => (
+          <ApplicationsTable
+            applications={filteredApplications}
+            onOpen={onOpen}
+            sortBy={sortBy}
+            onSort={handleHeaderSort}
+          />
 
-              <ApplicationCard
-                key={application.id}
-                application={application}
-                onClick={() =>
-                  onOpen(application.id)
-                }
-              />
+        ) : (
 
-            )
-          )}
+          <div className="applications-list">
 
-        </div>
+            {filteredApplications.map(
+              (application) => (
+
+                <ApplicationCard
+                  key={application.id}
+                  application={application}
+                  onClick={() =>
+                    onOpen(application.id)
+                  }
+                />
+
+              )
+            )}
+
+          </div>
+
+        )
 
       ) : (
 
